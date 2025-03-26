@@ -114,11 +114,11 @@ export function Navigation() {
             hover:scale-105
             px-6 py-2
             font-medium"
-          onClick={() => window.open('https://wa.me/27725499394', '_blank')}
+          onClick={() => window.open('/cv.pdf', '_blank')}
           asChild
         >
-          <Link href="https://wa.me/27725499394" target="_blank">
-            Hire Me
+          <Link href="/cv.pdf" target="_blank">
+            Resume
           </Link>
         </Button>
 
@@ -157,11 +157,11 @@ export function Navigation() {
             ))}
             <Button 
               className="w-[calc(100%-2rem)] rounded-lg bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300 text-background"
-              onClick={() => window.open('https://wa.me/27725499394', '_blank')}
+              onClick={() => window.open('/cv.pdf', '_blank')}
               asChild
             >
-              <Link href="https://wa.me/27725499394" target="_blank">
-                Hire me
+              <Link href="/cv.pdf" target="_blank">
+                Resume
               </Link>
             </Button>
           </nav>
