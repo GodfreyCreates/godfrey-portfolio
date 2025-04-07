@@ -1,11 +1,11 @@
 "use client";
 
-import React from "react"; // Import React for Tooltip Primitive Provider context
+import React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import {
-  // Icons remain the same as your provided list
+  // Icons remain the same
   IconBrandReact,
   IconBrandNextjs,
   IconBrandTypescript,
@@ -77,7 +77,7 @@ const technologies = [
     }
   ];
 
-// Radix UI Tooltip Components
+// Radix UI Tooltip Components (Themed)
 const Tooltip = TooltipPrimitive.Root;
 const TooltipTrigger = TooltipPrimitive.Trigger;
 const TooltipContent = React.forwardRef<
@@ -92,16 +92,15 @@ const TooltipContent = React.forwardRef<
     collisionPadding={10}
     className={cn(
       "z-50 max-w-[240px] overflow-hidden rounded-md border border-white/[0.08] bg-black/80 backdrop-blur-sm px-3 py-2 text-sm text-white/90 shadow-xl select-none touch-none",
-      // Removed specific animation classes, Framer Motion handles it if wrapped
       className
     )}
     {...props}
   />
 ));
-TooltipContent.displayName = TooltipPrimitive.Content.displayName; // Assign display name
+TooltipContent.displayName = TooltipPrimitive.Content.displayName;
 
 
-// Tech Category Card Component (THEMED & ENHANCED ANIMATION)
+// Tech Category Card Component (Themed & Simple Smooth Animation)
 function TechCategory({ category, items, description, index, Icon, className }: {
   category: string;
   items: { name: string; icon: any; description: string }[];
@@ -112,41 +111,41 @@ function TechCategory({ category, items, description, index, Icon, className }: 
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20, scale: 0.98 }} // Added scale
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      whileHover={{ y: -4, scale: 1.01 }} // Enhanced hover effect
-      transition={{ duration: 0.4, delay: index * 0.1, ease: "easeOut" }} // Slightly adjusted duration/ease
-      viewport={{ once: true, amount: 0.2 }} // Trigger animation earlier
+      initial={{ opacity: 0, y: 15 }} // Simpler initial state (removed scale)
+      whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -5 }} // Simpler hover (removed scale)
+      transition={{ duration: 0.5, delay: index * 0.1, ease: "easeOut" }} // Slightly longer duration
+      viewport={{ once: true, amount: 0.2 }}
       className={cn(
-        "p-6 rounded-xl relative overflow-hidden", // Added relative overflow-hidden
-        "bg-white/[0.03] border border-white/[0.08]", // Timeline theme background/border
-        "transition-all duration-300 ease-out", // Smooth transition for non-motion properties
-        "hover:shadow-xl hover:border-rose-500/30", // Subtle rose hover border
-        className
+        "p-6 rounded-xl relative overflow-hidden",
+        "bg-white/[0.03] border border-white/[0.08]",
+        "transition-all duration-300 ease-out", // Keep for non-motion CSS transitions like border-color
+        "hover:shadow-xl hover:border-rose-500/30",
+        className,
+        "group" // Add group class for inner hover states if needed
       )}
     >
-       {/* Subtle background glow on hover */}
-       <motion.div
-          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+       {/* Subtle background glow on hover (optional - keep if liked) */}
+       <div // Changed to simple div as motion not strictly needed here
+          className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" // ensure it doesn't block interactions
           style={{
-             background: 'radial-gradient(circle at center, rgba(225, 29, 72, 0.1), transparent 60%)', // Rose glow
+             background: 'radial-gradient(circle at center, rgba(225, 29, 72, 0.08), transparent 65%)', // Rose glow, slightly adjusted
           }}
         />
 
-      <div className="relative z-10"> {/* Ensure content is above glow */}
+      <div className="relative z-10">
         {/* Icon and Title Section */}
         <div className="flex items-start justify-between mb-6">
           <div>
-             <h3 className="text-xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-rose-300"> {/* Timeline title gradient */}
+             <h3 className="text-xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-rose-300"> {/* Title Gradient remains as per theme */}
                {category}
              </h3>
-             <p className="text-white/60 text-sm"> {/* Timeline secondary text */}
+             <p className="text-white/60 text-sm">
                {description}
              </p>
           </div>
-          {/* Use Timeline theme for icon background */}
           <div className="w-12 h-12 flex-shrink-0 rounded-lg bg-gradient-to-br from-indigo-500/10 to-rose-500/10 flex items-center justify-center border border-white/[0.08] ml-4">
-            <Icon className="w-6 h-6 text-rose-400" /> {/* Rose icon color */}
+            <Icon className="w-6 h-6 text-rose-400" />
           </div>
         </div>
 
@@ -156,25 +155,23 @@ function TechCategory({ category, items, description, index, Icon, className }: 
             <Tooltip key={tech.name}>
               <TooltipTrigger asChild>
                 <motion.div
-                  initial={{ opacity: 0, x: -10, scale: 0.95 }} // Added scale
-                  whileInView={{ opacity: 1, x: 0, scale: 1 }}
-                  transition={{ duration: 0.3, delay: (index * 0.1) + 0.15 + (techIndex * 0.05), ease: "easeOut" }} // Adjusted base delay slightly
+                  initial={{ opacity: 0, x: -10 }} // Simple slide-in
+                  whileInView={{ opacity: 1, x: 0 }}
+                  // Slightly longer duration for smoother feel on small items
+                  transition={{ duration: 0.4, delay: (index * 0.1) + 0.2 + (techIndex * 0.05), ease: "easeOut" }}
                   viewport={{ once: true }}
-                  className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.05] border border-white/[0.08] hover:border-rose-500/40 hover:bg-rose-500/5 transition-all group cursor-pointer" // Timeline item theme
+                  className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.05] border border-white/[0.08] hover:border-rose-500/40 hover:bg-rose-500/5 transition-all group cursor-pointer"
                 >
-                  {/* Timeline theme for icon container */}
                   <div className="p-1.5 rounded-md bg-white/[0.03] group-hover:bg-rose-500/10 transition-colors">
-                    <tech.icon className="h-5 w-5 text-rose-300 group-hover:text-rose-200 transition-colors" /> {/* Rose icon */}
+                    <tech.icon className="h-5 w-5 text-rose-300 group-hover:text-rose-200 transition-colors" />
                   </div>
-                  <span className="text-sm font-medium text-white/80 group-hover:text-white transition-colors"> {/* Timeline primary text */}
+                  <span className="text-sm font-medium text-white/80 group-hover:text-white transition-colors">
                     {tech.name}
                   </span>
                 </motion.div>
               </TooltipTrigger>
-              {/* Use themed TooltipContent */}
               <TooltipContent>
                 {tech.description}
-                 {/* Arrow color matches the tooltip background */}
                 <TooltipPrimitive.Arrow className="fill-black/80" width={11} height={5} />
               </TooltipContent>
             </Tooltip>
@@ -185,49 +182,42 @@ function TechCategory({ category, items, description, index, Icon, className }: 
   );
 }
 
-// Main Section Component (THEMED & ENHANCED ANIMATION)
+// Main Section Component (Themed & Simple Smooth Animation)
 export function TechStackSection() {
   return (
-    // Provider needs React Context
     <TooltipPrimitive.Provider
       delayDuration={100}
       skipDelayDuration={0}
       disableHoverableContent={false}
     >
-      {/* Use timeline base background */}
       <div className="relative w-full bg-[#030303] py-24 md:py-32 overflow-hidden">
-        {/* Timeline theme background gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
-
-         {/* Grid lines effect - Keep as is, subtle */}
-        <div className="absolute inset-0 z-0 opacity-[0.06]"> {/* Slightly reduced opacity */}
+         <div className="absolute inset-0 z-0 opacity-[0.06]">
             <div
               className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:48px_48px]"></div>
         </div>
 
-
         <div className="mx-auto max-w-6xl px-4 relative z-10">
-          {/* Section Header - Apply Timeline Theme */}
+          {/* Section Header */}
           <div className="text-center max-w-3xl mx-auto mb-16">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
               viewport={{ once: true }}
-               // Timeline theme for badge
               className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] mb-4"
             >
-              <IconCircle className="h-2.5 w-2.5 fill-rose-500/80" /> {/* Rose icon */}
-              <span className="text-sm text-white/60 tracking-wide">Technologies</span> {/* Timeline secondary text */}
+              <IconCircle className="h-2.5 w-2.5 fill-rose-500/80" />
+              <span className="text-sm text-white/60 tracking-wide">Technologies</span>
             </motion.div>
 
             <motion.h2
-             initial={{ opacity: 0, y: 20, scale: 0.95 }} // Added scale
-             whileInView={{ opacity: 1, y: 0, scale: 1 }}
+             initial={{ opacity: 0, y: 20 }} // Simplified initial state
+             whileInView={{ opacity: 1, y: 0 }}
              transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
              viewport={{ once: true }}
-             // Timeline theme title gradient
-             className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-b from-indigo-200 to-rose-300" // Adjusted gradient slightly
+             // Removed gradient classes, added solid text color
+             className="text-4xl md:text-5xl font-bold mb-4 text-neutral-100" // Using neutral-100 for bright white
             >
               Tech Stack & Tools
             </motion.h2>
@@ -237,13 +227,13 @@ export function TechStackSection() {
              whileInView={{ opacity: 1, y: 0 }}
              transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
              viewport={{ once: true }}
-             className="text-white/60 md:text-lg" // Timeline secondary text
+             className="text-white/60 md:text-lg"
             >
               A curated selection of modern technologies and tools I leverage to build robust, scalable, and engaging applications.
             </motion.p>
           </div>
 
-          {/* Bento Grid Layout - Uses themed TechCategory */}
+          {/* Bento Grid Layout */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {technologies.map((techGroup, index) => (
               <TechCategory
@@ -251,9 +241,8 @@ export function TechStackSection() {
                 category={techGroup.category}
                 items={techGroup.items}
                 description={techGroup.description}
-                index={index} // Pass index for staggering
+                index={index}
                 Icon={techGroup.icon}
-                // Apply specific grid spans based on original layout intention
                 className={cn(
                    index === 0 ? "md:col-span-1 lg:col-span-2" : "", // Frontend
                    index === 1 ? "md:col-span-1 lg:col-span-1" : "", // Backend
