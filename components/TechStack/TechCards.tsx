@@ -73,13 +73,6 @@ function TechCards() {
     // Section container with padding
     <div className="py-16 md:py-24">
       <div className="container mx-auto px-4">
-        {/* Section Header (Optional but recommended) */}
-        <div className="text-center mb-12 md:mb-16">
-           <h2 className="text-3xl md:text-4xl font-bold mb-3">My Core Skills</h2>
-           <p className="text-muted-foreground max-w-xl mx-auto">
-             Blending design expertise with full-stack development capabilities to create comprehensive digital solutions.
-           </p>
-        </div>
 
         {/* Cards Container - Handles responsive layout */}
         <div className="
