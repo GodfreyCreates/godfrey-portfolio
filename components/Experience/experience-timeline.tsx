@@ -6,65 +6,67 @@ import { cn } from "@/lib/utils";
 
 // --- experiences array remains the same ---
 const experiences = [
-  {
-    title: "Fullstack Developer",
-    company: "Hlengwe Research and Training Experts (PTY) LTD",
-    location: "On Site",
-    period: "2024",
-    description: "Built and maintained an online Guest house Booking web application, ensuring high performance and responsiveness.",
-    highlights: [
-      "Next.js, TypeScript, Tailwind CSS",
-      "Redux, ShadCN, MySQL",
-      "Payment Gateway Integration",
-      "WordPress CMS Integration"
-    ],
-    side: "right"
-  },
-  {
-    title: "Graphic Designer & Web Developer",
-    company: "Shidumo Transport Solutions (PTY) LTD",
-    location: "Remote",
-    period: "2022 - 2024",
-    description: "Built and maintained an Invoice Generator web application, ensuring high performance, PDF generation and responsiveness.",
-    highlights: [
-      "React, TypeScript, Tailwind CSS",
-      "Redux, ShadCN UI Components",
-      "Adobe Photoshop & Illustrator",
-      "Full-stack Development"
-    ],
-    side: "left"
-  },
-  {
-    title: "WordPress Designer & Graphic Designer",
-    company: "Moon Wealth FX PTY (LTD)",
-    location: "Remote",
-    period: "2020 - 2022",
-    description: "Created posters for social media advertising, YouTube Intros, Created their website using WordPress with woocommerce for selling Courses online.",
-    highlights: [
-      "WordPress & WooCommerce Development",
-      "PHP & MySQL Integration",
-      "Adobe Photoshop & Illustrator",
-      "Social Media Content Creation"
-    ],
-    side: "right"
-  },
-  {
-    title: "Graphic Designer",
-    company: "Fullness of Christ Ministry",
-    location: "Limpopo, Elim",
-    period: "2016 - 2022",
-    description: "Created visually appealing graphics and managed social media content for the church, resulting in an increase in online engagement.",
-    highlights: [
-      "Social Media Content Design",
-      "Adobe Photoshop & Illustrator",
-      "Photography",
-      "Volunteer Position"
-    ],
-    side: "left"
-  }
-];
+    {
+      title: "Fullstack Developer",
+      company: "Hlengwe Research and Training Experts (PTY) LTD",
+      location: "On Site",
+      period: "2024",
+      description: "Built and maintained an online Guest house Booking web application, ensuring high performance and responsiveness.",
+      highlights: [
+        "Next.js, TypeScript, Tailwind CSS",
+        "Redux, ShadCN, MySQL",
+        "Payment Gateway Integration",
+        "WordPress CMS Integration"
+      ],
+      // side property is no longer used for layout but might be useful for data
+      side: "right"
+    },
+    {
+      title: "Graphic Designer & Web Developer",
+      company: "Shidumo Transport Solutions (PTY) LTD",
+      location: "Remote",
+      period: "2022 - 2024",
+      description: "Built and maintained an Invoice Generator web application, ensuring high performance, PDF generation and responsiveness.",
+      highlights: [
+        "React, TypeScript, Tailwind CSS",
+        "Redux, ShadCN UI Components",
+        "Adobe Photoshop & Illustrator",
+        "Full-stack Development"
+      ],
+      side: "left"
+    },
+    {
+      title: "WordPress Designer & Graphic Designer",
+      company: "Moon Wealth FX PTY (LTD)",
+      location: "Remote",
+      period: "2020 - 2022",
+      description: "Created posters for social media advertising, YouTube Intros, Created their website using WordPress with woocommerce for selling Courses online.",
+      highlights: [
+        "WordPress & WooCommerce Development",
+        "PHP & MySQL Integration",
+        "Adobe Photoshop & Illustrator",
+        "Social Media Content Creation"
+      ],
+      side: "right"
+    },
+    {
+      title: "Graphic Designer",
+      company: "Fullness of Christ Ministry",
+      location: "Limpopo, Elim",
+      period: "2016 - 2022",
+      description: "Created visually appealing graphics and managed social media content for the church, resulting in an increase in online engagement.",
+      highlights: [
+        "Social Media Content Design",
+        "Adobe Photoshop & Illustrator",
+        "Photography",
+        "Volunteer Position"
+      ],
+      side: "left"
+    }
+  ];
 
 
+// TimelineItem component is now simpler
 function TimelineItem({
   experience,
   index
@@ -72,36 +74,26 @@ function TimelineItem({
   experience: typeof experiences[0];
   index: number;
 }) {
-  const isRight = experience.side === "right";
+  // isRight is no longer needed for layout control
+  // const isRight = experience.side === "right";
 
   return (
-    // Add padding-top on mobile ONLY to push content below the absolute dot
-    // Ensure relative positioning for stacking context if needed, though parent handles absolute positioning now.
-    <div className={cn(
-      "relative mb-8 flex w-full", // Added relative just in case, mb-8 for spacing
-      "pt-12 md:pt-0", // Crucial: Add space at the top on mobile for the absolute dot
-      "flex-col md:flex-row", // Mobile column, Desktop row
-      isRight ? "" : "md:flex-row-reverse", // Desktop: reverse for left items
-      "md:items-start" // Align items to the start on desktop row
-    )}>
+    // Add consistent left padding to push content away from the left line/dot
+    // mb-8 adds space between items
+    <div className={cn("relative mb-8 pl-16 md:pl-20")}> {/* Increased padding */}
 
-      {/* Desktop spacer (pushes content left/right) */}
-      <div className="hidden md:block w-5/12"></div>
-
-      {/* Desktop central spacer (space between content and center line) */}
-      <div className="hidden md:block w-12"></div> {/* Adjust width as needed */}
+      {/* Removed desktop spacers */}
 
       {/* Content Block */}
       <motion.div
-        initial={{ opacity: 0, x: isRight ? 50 : -50 }} // Reduced initial x offset
+        initial={{ opacity: 0, x: 50 }} // Simple slide-in from right
         whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5, delay: index * 0.1 }} // Slightly faster delay
+        transition={{ duration: 0.5, delay: index * 0.1 }}
         viewport={{ once: true }}
         className={cn(
-          "md:w-5/12 w-full px-6 py-4 rounded-lg", // Desktop takes half, mobile takes full
+          "w-full px-6 py-4 rounded-lg", // Takes full width within the padded container
           "bg-white/[0.03] border border-white/[0.08]",
           "transform transition-all hover:-translate-y-1 hover:shadow-xl"
-          // No order needed now
         )}
       >
         {/* -- Content structure remains the same -- */}
@@ -131,7 +123,7 @@ function TimelineItem({
               key={i}
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: (index * 0.1) + (i * 0.05) }} // Faster delay
+              transition={{ duration: 0.3, delay: (index * 0.1) + (i * 0.05) }}
               viewport={{ once: true }}
               className="text-sm text-white/40 flex items-start gap-2"
             >
@@ -141,22 +133,23 @@ function TimelineItem({
           ))}
         </ul>
       </motion.div>
-
-      {/* Mobile-only dot REMOVED - Handled by the single absolute dot */}
-
     </div>
   );
 }
 
 
 export function ExperienceTimeline() {
+  // Define the left offset for the line and dots (e.g., 1rem = left-4, 1.5rem = left-6)
+  const lineOffset = "left-6"; // Use Tailwind class directly
+  const contentPadding = "pl-16 md:pl-20"; // Corresponds to left-6 plus spacing (4rem / 5rem)
+
   return (
-    <div className="relative w-full bg-[#030303] py-24 overflow-hidden"> {/* Added overflow-hidden */}
+    <div className="relative w-full bg-[#030303] py-24 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
 
       <div className="mx-auto max-w-5xl px-4 relative z-10">
          {/* -- Heading structure remains the same -- */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+         <div className="text-center max-w-3xl mx-auto mb-16">
            <motion.div
              initial={{ opacity: 0, y: 20 }}
              whileInView={{ opacity: 1, y: 0 }}
@@ -174,32 +167,33 @@ export function ExperienceTimeline() {
            </p>
          </div>
 
-        {/* Container for timeline items and the central line */}
-        {/* Added 'relative' here as the main positioning context */}
-        <div className="relative wrap"> {/* Removed overflow-hidden from here */}
-          {/* Central Timeline Line - NOW VISIBLE ON ALL SIZES */}
-          {/* Ensure it's behind the dots (z-0 vs z-20) */}
-          <div className="absolute left-1/2 h-full w-0.5 bg-white/[0.08] transform -translate-x-1/2 z-0"></div>
+        {/* Container for timeline items and the vertical line */}
+        <div className="relative wrap">
+          {/* Vertical Line - Positioned on the left */}
+          <div className={cn(
+             "absolute h-full w-0.5 bg-white/[0.08] z-0",
+             lineOffset // Apply the offset class (e.g., "left-6")
+             // Removed transform -translate-x-1/2
+          )}></div>
 
           {/* Map through experiences */}
           {experiences.map((experience, index) => (
-            // This wrapper helps group the absolute dot with its corresponding TimelineItem logically
             <div key={index} className="relative">
-               {/* SINGLE ABSOLUTE DOT for Mobile & Desktop */}
+               {/* Timeline Dot - Aligned with the left line */}
                <div className={cn(
-                 "absolute left-1/2", // Center horizontally using left-1/2 and transform
-                 "transform -translate-x-1/2",
-                 // Adjust vertical position: higher on mobile, slightly lower on desktop
-                 "top-4 md:top-6", // e.g., 1rem on mobile, 1.5rem on desktop
-                 "flex items-center justify-center", // Center the icon inside the dot div
-                 "z-20 w-8 h-8 rounded-full", // z-20 to be above line (z-0)
+                 "absolute top-6", // Vertical offset from the top of the item wrapper
+                 lineOffset, // Use the same offset class as the line (e.g., "left-6")
+                 "transform -translate-x-1/2", // Center the dot *on* the line offset
+                 "flex items-center justify-center",
+                 "z-20 w-8 h-8 rounded-full",
                  "border border-white/[0.08] shadow-xl",
                  "bg-gradient-to-br from-indigo-500/10 to-rose-500/10"
                )}>
                  <IconCircle className="w-3 h-3 fill-rose-500/80" />
                </div>
 
-              {/* Render the TimelineItem component */}
+              {/* Render the TimelineItem component - Pass padding class */}
+              {/* Update: Padding is now directly in TimelineItem */}
               <TimelineItem experience={experience} index={index} />
             </div>
           ))}
