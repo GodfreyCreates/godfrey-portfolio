@@ -31,7 +31,9 @@ const techCards = [
       sm:translate-x-0 sm:translate-y-0
       md:translate-x-0 md:translate-y-0
       lg:translate-x-0 lg:translate-y-0
+      bg-no-repeat bg-cover bg-center
     `,
+    imageUrl: "https://res.cloudinary.com/doesjyiwl/image/upload/v1744008658/image_fx_pvamyk.png"
   },
   {
     icon: <IconServer className="size-5 md:size-6" />,
@@ -56,7 +58,9 @@ const techCards = [
       grayscale-[80%] hover:grayscale-0 
       before:transition-opacity before:duration-500 
       hover:before:opacity-0
+      bg-no-repeat bg-cover bg-center
     `,
+    imageUrl: "https://res.cloudinary.com/doesjyiwl/image/upload/v1744008658/image_fx_pvamyk.png"
   },
   {
     icon: <IconPalette className="size-5 md:size-6" />,
@@ -81,7 +85,9 @@ const techCards = [
       grayscale-[80%] hover:grayscale-0 
       before:transition-opacity before:duration-500 
       hover:before:opacity-0
+      bg-no-repeat bg-cover bg-center
     `,
+    imageUrl: "https://res.cloudinary.com/doesjyiwl/image/upload/v1744008658/image_fx_pvamyk.png"
   },
 ];
 
@@ -90,7 +96,15 @@ function TechCards() {
     <div className="flex min-h-[250px] w-full items-center justify-center px-4 sm:px-6 overflow-hidden">
       <div className="w-full max-w-5xl mx-auto py-8 md:py-12">
         <DisplayCards 
-          cards={techCards}
+          cards={techCards.map(card => ({
+            ...card,
+            backgroundImageStyle: {
+              backgroundImage: `url(${card.imageUrl})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat'
+            }
+          }))}
         />
       </div>
     </div>
