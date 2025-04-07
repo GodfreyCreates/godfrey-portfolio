@@ -1,5 +1,3 @@
-// components/Experience/experience-timeline.tsx
-
 "use client";
 
 import { motion } from "framer-motion";
@@ -113,17 +111,17 @@ function TimelineItem({
             isRight ? "justify-start" : "justify-end md:grid-flow-row-dense"
         )}>
 
-            {/* Mobile Connector Line - Centered */}
+            {/* Mobile Connector Line - Centered and properly positioned */}
             {!isLast && (
-                <div className="absolute left-1/2 transform -translate-x-1/2 top-10 h-full w-0.5 bg-white/[0.08] block md:hidden" aria-hidden="true" />
+                <div className="absolute left-1/2 transform -translate-x-1/2 top-5 h-full w-0.5 bg-white/[0.08] block md:hidden" aria-hidden="true" />
             )}
 
-            {/* Dot Container - Centered on mobile */}
+            {/* Dot Container - Centered and properly aligned */}
             <div className={cn(
                 "relative z-10 flex-shrink-0 order-1",
-                "md:col-start-2 mx-auto" // Center dot container on mobile
+                "md:col-start-2 mx-auto" // Center dot container
             )}>
-                {/* Dot Visual - No incorrect offset */}
+                {/* Dot Visual */}
                 <div className="w-10 h-10 rounded-full border border-white/[0.08] shadow-xl flex items-center justify-center bg-gradient-to-br from-indigo-500/10 to-rose-500/10">
                     <IconBriefcase className="w-5 h-5 text-rose-400" />
                 </div>
@@ -232,8 +230,8 @@ export function ExperienceTimeline() {
 
                 {/* Timeline Container */}
                 <div className="relative">
-                    {/* Desktop Timeline Line */}
-                    <div className="absolute left-1/2 top-5 bottom-5 w-0.5 bg-white/[0.08] transform -translate-x-1/2 hidden md:block" aria-hidden="true"></div>
+                    {/* Desktop Timeline Line - Now perfectly centered with the dots */}
+                    <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-white/[0.08] transform -translate-x-1/2 hidden md:block" aria-hidden="true"></div>
 
                     {/* Map through experiences */}
                     {experiences.map((experience, index) => (
