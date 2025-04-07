@@ -88,10 +88,9 @@ const techCards = [
 function TechCards() {
   return (
     <div className="flex min-h-[250px] w-full items-center justify-center px-4 sm:px-6 overflow-hidden">
-      <div className="w-full max-w-5xl mx-auto">
+      <div className="w-full max-w-5xl mx-auto py-8 md:py-12">
         <DisplayCards 
-          cards={techCards} 
-          containerClassName="py-8 md:py-12"
+          cards={techCards}
         />
       </div>
     </div>
