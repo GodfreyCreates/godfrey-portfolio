@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react"; // Import React for forwardRef if needed later, good practice
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { IconCircle, IconExternalLink, IconBrandGithub } from '@tabler/icons-react';
 import { Button } from "@/components/ui/button"; // Assuming this exists and is styled
@@ -13,10 +13,10 @@ import { cn } from "@/lib/utils"; // Assuming this exists
 // Select featured projects (adjust logic as needed)
 const featuredProjects = [
   ...projects.web.slice(0, 2),
-  projects.graphic.length > 0 ? projects.graphic[0] : null // Handle empty graphic projects
-].filter(Boolean) as Project[]; // Filter out null if graphic array was empty
+  projects.graphic.length > 0 ? projects.graphic[0] : null
+].filter(Boolean) as Project[];
 
-// --- Project Card Component ---
+// --- Project Card Component (CORRECTED STRUCTURE) ---
 function ProjectCard({ project, index }: { project: Project; index: number }) {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
@@ -40,44 +40,49 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   };
 
   return (
-    <>
+    // **** CORRECT: Dialog now wraps the Card visual and the Modal Content ****
+    <Dialog open={isImageModalOpen} onOpenChange={setIsImageModalOpen}>
+      {/* Card Visuals (includes the Trigger) */}
       <motion.div
         variants={cardVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.2 }}
+        // We apply card styles here, but it's *not* the Dialog root itself
         className={cn(
-          "group relative flex flex-col h-full rounded-xl overflow-hidden shadow-lg", // Added flex flex-col h-full
+          "group relative flex flex-col h-full rounded-xl overflow-hidden shadow-lg",
           "bg-gradient-to-br from-slate-800/60 to-slate-900/60 border border-white/10",
           "transition-all duration-300 ease-out hover:border-rose-400/60 hover:shadow-rose-500/10 hover:scale-[1.03]"
+          // Note: The hover scale might visually disconnect from the trigger slightly,
+          // consider applying hover styles carefully or maybe triggering dialog differently.
+          // For now, keeping the visual card separate from the logical dialog root.
         )}
       >
-        {/* Image Section */}
-        <DialogTrigger asChild onClick={() => setIsImageModalOpen(true)}>
-           <div className="relative h-52 sm:h-60 overflow-hidden cursor-pointer">
+        {/* **** CORRECT: DialogTrigger is now a descendant of Dialog **** */}
+        <DialogTrigger asChild>
+           <div className="relative h-52 sm:h-60 overflow-hidden cursor-pointer"> {/* Make sure trigger area is clickable */}
               <Image
                 src={project.image}
                 alt={`${project.title} preview`}
                 fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Optimize image loading
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 className="object-cover transition-transform duration-300 ease-in-out group-hover:scale-110"
               />
-              {/* Optional: Overlay on hover */}
               <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                 <span className="text-white text-sm bg-black/50 px-3 py-1 rounded">View Image</span>
               </div>
            </div>
         </DialogTrigger>
 
-        {/* Content Section */}
-        <div className="p-5 sm:p-6 flex flex-col flex-grow"> {/* Added flex-grow */}
+        {/* Content Section (remains inside the visual card structure) */}
+        <div className="p-5 sm:p-6 flex flex-col flex-grow">
           <h3 className="text-lg sm:text-xl font-semibold mb-1 text-white/95 group-hover:text-rose-300 transition-colors duration-200">
             {project.title}
           </h3>
-          {project.Client && ( // Conditionally render Client
+          {project.Client && (
              <div className="text-xs sm:text-sm text-indigo-300/80 mb-3">{project.Client}</div>
           )}
-          <p className="text-sm text-white/60 mb-4 flex-grow leading-relaxed"> {/* Added flex-grow */}
+          <p className="text-sm text-white/60 mb-4 flex-grow leading-relaxed">
              {project.description}
           </p>
 
@@ -88,7 +93,6 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                 key={tag}
                 custom={tagIndex}
                 variants={tagVariants}
-                // Initial/whileInView handled by parent card, variant handles entry
                 className="px-2.5 py-0.5 text-[11px] sm:text-xs rounded-full bg-white/5 border border-white/10 text-white/60"
               >
                 {tag}
@@ -97,10 +101,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           </div>
 
           {/* Buttons */}
-          <div className="flex items-center gap-3 mt-auto pt-2"> {/* mt-auto pushes buttons down */}
+          <div className="flex items-center gap-3 mt-auto pt-2">
             {project.liveDemo && (
               <Button size="sm" variant="default" asChild className="bg-rose-600/90 hover:bg-rose-500/90 text-white">
-                 {/* Use variant="default" or your primary style */}
                 <a href={project.liveDemo} target="_blank" rel="noopener noreferrer" aria-label={`View live demo of ${project.title}`}>
                   <IconExternalLink className="w-4 h-4 mr-1.5" />
                   Demo
@@ -109,26 +112,19 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             )}
             {project.type === 'web' && project.github && (
               <Button size="sm" variant="outline" asChild className="border-white/20 hover:bg-white/5 hover:text-white text-white/70">
-                 {/* Customize outline style */}
                 <a href={project.github} target="_blank" rel="noopener noreferrer" aria-label={`View source code of ${project.title} on Github`}>
                   <IconBrandGithub className="w-4 h-4 mr-1.5" />
                   Code
                 </a>
               </Button>
             )}
-             {/* Add a details button if no external links */}
-             {!project.liveDemo && !(project.type === 'web' && project.github) && project.type === 'graphic' && (
-                <Button size="sm" variant="outline" onClick={() => setIsImageModalOpen(true)} className="border-white/20 hover:bg-white/5 hover:text-white text-white/70">
-                   View Details
-                </Button>
-             )}
+             {/* If graphic project with no links, trigger is the image itself */}
           </div>
         </div>
       </motion.div>
 
-      {/* --- Image Modal Dialog --- */}
-      <Dialog open={isImageModalOpen} onOpenChange={setIsImageModalOpen}>
-        <DialogContent className="max-w-3xl p-4 sm:p-6 bg-slate-900/90 border-slate-700/50 shadow-2xl backdrop-blur-md">
+      {/* **** CORRECT: DialogContent remains a direct child of Dialog **** */}
+      <DialogContent className="max-w-3xl p-4 sm:p-6 bg-slate-900/90 border-slate-700/50 shadow-2xl backdrop-blur-md">
           <DialogHeader>
             <DialogTitle className="text-xl sm:text-2xl font-semibold text-white/95 mb-2">{project.title}</DialogTitle>
             <DialogDescription className="text-sm text-white/60">
@@ -140,12 +136,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
               src={project.image}
               alt={project.title}
               fill
-              sizes="(max-width: 768px) 90vw, 70vw" // Adjust sizes for modal
-              className="object-contain" // Use contain to show the whole image
-              priority // Load high priority as it's user-initiated
+              sizes="(max-width: 768px) 90vw, 70vw"
+              className="object-contain"
+              priority
             />
           </div>
-           {/* Optional: Add links inside modal too */}
            <div className="flex items-center gap-3 mt-6">
                {project.liveDemo && (
                  <Button size="sm" variant="default" asChild className="bg-rose-600/90 hover:bg-rose-500/90 text-white">
@@ -164,13 +159,12 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                  </Button>
                )}
            </div>
-        </DialogContent>
-      </Dialog>
-    </>
+      </DialogContent>
+    </Dialog> // End of the Dialog wrapper
   );
 }
 
-// --- Main Featured Projects Section ---
+// --- Main Featured Projects Section (No changes needed here) ---
 export function FeaturedProjects() {
   return (
     <section className="relative w-full bg-[#0a0a0f] py-24 sm:py-32 overflow-hidden">
@@ -246,3 +240,4 @@ export function FeaturedProjects() {
     </section>
   );
 }
+
