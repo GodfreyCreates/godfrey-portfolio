@@ -18,7 +18,7 @@ const experiences = [
         "Payment Gateway Integration",
         "WordPress CMS Integration"
       ],
-      // side property is no longer used for layout but might be useful for data
+      // side property IS now used for desktop layout
       side: "right"
     },
     {
@@ -66,7 +66,6 @@ const experiences = [
   ];
 
 
-// TimelineItem component is now simpler
 function TimelineItem({
   experience,
   index
@@ -74,24 +73,35 @@ function TimelineItem({
   experience: typeof experiences[0];
   index: number;
 }) {
-  // isRight is no longer needed for layout control
-  // const isRight = experience.side === "right";
+  // Determine side for desktop layout
+  const isRight = experience.side === "right";
 
   return (
-    // Add consistent left padding to push content away from the left line/dot
-    // mb-8 adds space between items
-    <div className={cn("relative mb-8 pl-16 md:pl-20")}> {/* Increased padding */}
+    // Add left padding for mobile, remove it for desktop
+    // Add flex container for desktop layout, control direction based on 'isRight'
+    <div className={cn(
+      "relative mb-8", // Base styling
+      "pl-16 md:pl-0", // Mobile: padding left; Desktop: no padding
+      "md:flex md:justify-between md:items-start", // Desktop: flex layout
+      !isRight && "md:flex-row-reverse" // Desktop: reverse row for left items
+    )}>
 
-      {/* Removed desktop spacers */}
+      {/* Desktop Spacer (pushes content left/right) - Hidden on mobile */}
+      <div className="hidden md:block md:w-5/12"></div>
+
+      {/* Desktop Central Spacer (space between content and center line) - Hidden on mobile */}
+      <div className="hidden md:block md:w-12"></div> {/* Adjust width as needed */}
 
       {/* Content Block */}
       <motion.div
-        initial={{ opacity: 0, x: 50 }} // Simple slide-in from right
+        // Animate based on desktop side, simpler animation for mobile
+        initial={{ opacity: 0, x: isRight ? 50 : -50 }}
         whileInView={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5, delay: index * 0.1 }}
         viewport={{ once: true }}
         className={cn(
-          "w-full px-6 py-4 rounded-lg", // Takes full width within the padded container
+          "w-full md:w-5/12", // Mobile: full width (within padding); Desktop: half width
+          "px-6 py-4 rounded-lg",
           "bg-white/[0.03] border border-white/[0.08]",
           "transform transition-all hover:-translate-y-1 hover:shadow-xl"
         )}
@@ -139,9 +149,11 @@ function TimelineItem({
 
 
 export function ExperienceTimeline() {
-  // Define the left offset for the line and dots (e.g., 1rem = left-4, 1.5rem = left-6)
-  const lineOffset = "left-6"; // Use Tailwind class directly
-  const contentPadding = "pl-16 md:pl-20"; // Corresponds to left-6 plus spacing (4rem / 5rem)
+  // Define offsets for mobile (left) and desktop (center)
+  const mobileLineOffset = "left-6"; // e.g., 1.5rem
+  const desktopLineOffset = "md:left-1/2";
+  const mobileContentPadding = "pl-16"; // e.g., 4rem (must clear mobileLineOffset + dot)
+  const desktopContentPadding = "md:pl-0";
 
   return (
     <div className="relative w-full bg-[#030303] py-24 overflow-hidden">
@@ -149,8 +161,9 @@ export function ExperienceTimeline() {
 
       <div className="mx-auto max-w-5xl px-4 relative z-10">
          {/* -- Heading structure remains the same -- */}
-         <div className="text-center max-w-3xl mx-auto mb-16">
-           <motion.div
+        <div className="text-center max-w-3xl mx-auto mb-16">
+           {/* ... heading motion div ... */}
+            <motion.div
              initial={{ opacity: 0, y: 20 }}
              whileInView={{ opacity: 1, y: 0 }}
              viewport={{ once: true }}
@@ -169,21 +182,25 @@ export function ExperienceTimeline() {
 
         {/* Container for timeline items and the vertical line */}
         <div className="relative wrap">
-          {/* Vertical Line - Positioned on the left */}
+          {/* Vertical Line - Conditionally positioned */}
           <div className={cn(
              "absolute h-full w-0.5 bg-white/[0.08] z-0",
-             lineOffset // Apply the offset class (e.g., "left-6")
-             // Removed transform -translate-x-1/2
+             mobileLineOffset, // Default to left offset for mobile
+             desktopLineOffset, // Override with center offset for desktop
+             "md:transform md:-translate-x-1/2" // Apply transform only for desktop centering
           )}></div>
 
           {/* Map through experiences */}
           {experiences.map((experience, index) => (
-            <div key={index} className="relative">
-               {/* Timeline Dot - Aligned with the left line */}
+            // Wrapper includes the dot + item logic
+            // Pass conditional padding class down (or apply directly in TimelineItem as done now)
+             <div key={index} className={cn("relative")}> {/* Removed padding class from here */}
+               {/* Timeline Dot - Conditionally positioned */}
                <div className={cn(
-                 "absolute top-6", // Vertical offset from the top of the item wrapper
-                 lineOffset, // Use the same offset class as the line (e.g., "left-6")
-                 "transform -translate-x-1/2", // Center the dot *on* the line offset
+                 "absolute top-6", // Vertical offset (adjust if needed)
+                 mobileLineOffset, // Default to left offset for mobile
+                 desktopLineOffset, // Override with center offset for desktop
+                 "transform -translate-x-1/2", // Center dot ON the calculated left offset (works for both left-6 and left-1/2)
                  "flex items-center justify-center",
                  "z-20 w-8 h-8 rounded-full",
                  "border border-white/[0.08] shadow-xl",
@@ -192,8 +209,7 @@ export function ExperienceTimeline() {
                  <IconCircle className="w-3 h-3 fill-rose-500/80" />
                </div>
 
-              {/* Render the TimelineItem component - Pass padding class */}
-              {/* Update: Padding is now directly in TimelineItem */}
+              {/* Render the TimelineItem component */}
               <TimelineItem experience={experience} index={index} />
             </div>
           ))}
