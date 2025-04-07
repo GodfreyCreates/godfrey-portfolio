@@ -1,99 +1,105 @@
 "use client";
 
-// Assuming DisplayCards simply maps the cards array and renders each card
-// with its respective data and className. It should NOT impose its own layout now.
-import DisplayCards from "@/components/ui/display-cards"; 
 import { 
   IconCode, 
   IconServer, 
   IconPalette 
 } from '@tabler/icons-react';
+import React from 'react'; // Import React for potential fragments or hooks later
 
-// --- New "Blistered" Card Styles ---
-
-// Base styles for the blistered card effect
-const baseCardStyles = [
-  "relative", // Position relative for potential pseudo-elements if needed later
-  "bg-gradient-to-br from-neutral-800/80 to-neutral-900/90", // Dark gradient background with some transparency
-  "backdrop-blur-sm", // Subtle blur effect if behind other elements or on a textured background
-  "p-6", // Padding inside the card
-  "rounded-2xl", // Softer, more rounded corners
-  "border border-neutral-700/60", // A slightly visible border
-  "shadow-lg hover:shadow-xl", // Prominent shadow, increasing on hover
-  "transition-all duration-300 ease-in-out", // Smooth transitions for hover effects
-  "hover:border-neutral-600/80", // Slightly change border on hover
-  "hover:-translate-y-1", // Subtle lift effect on hover
-  // Optional: Add a subtle inner glow/highlight effect
-  // "before:absolute before:inset-0 before:rounded-2xl before:border before:border-white/10 before:opacity-50 before:content-['']", 
-].join(" "); // Join the array of classes into a string
-
-// Title styles can remain similar, adjust if needed for the new design
-const baseTitleStyles = "text-lg md:text-xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-rose-300"; 
-
-// Icon styles can remain similar
-const baseIconContainerStyles = "mb-3 inline-flex items-center justify-center size-8 rounded-full"; 
-
-const defaultCards = [
+// --- Card Data (Remains the same structure) ---
+const cardData = [
   {
-    icon: <IconCode className="size-4 text-rose-500" />,
-    title: "Backend",
-    description: "Solutions with Node.js & Databases", 
-    date: "2+ Years Experience",
-    iconClassName: `${baseIconContainerStyles} bg-rose-950/70`, // Adjusted background darkness/opacity
-    titleClassName: baseTitleStyles,
-    className: baseCardStyles, // Apply the new base styles directly to each card
+    id: "backend", // Added unique ID for key prop
+    icon: <IconCode className="size-6 text-rose-400" />, // Slightly larger icon
+    title: "Backend Development",
+    description: "Robust server-side solutions using Node.js, databases, and APIs.",
+    experience: "2+ Years Experience",
+    accentColor: "border-rose-500/50", // Accent color for border/highlight
+    iconBg: "bg-rose-900/30", // Subtle icon background
   },
   {
-    icon: <IconServer className="size-4 text-indigo-500" />,
-    title: "Frontend",
-    description: "Modern web dev with React & Next.js",
-    date: "3+ Years Experience",
-    iconClassName: `${baseIconContainerStyles} bg-indigo-950/70`, // Adjusted background darkness/opacity
-    titleClassName: baseTitleStyles,
-    className: baseCardStyles, // Apply the new base styles directly to each card
+    id: "frontend",
+    icon: <IconServer className="size-6 text-indigo-400" />,
+    title: "Frontend Development",
+    description: "Modern, interactive UIs built with React, Next.js, and TypeScript.",
+    experience: "3+ Years Experience",
+    accentColor: "border-indigo-500/50",
+    iconBg: "bg-indigo-900/30",
   },
   {
-    icon: <IconPalette className="size-4 text-purple-500" />,
-    title: "Graphic Design",
-    description: "Creative UI/UX with design tools",
-    date: "6+ Years Experience",
-    iconClassName: `${baseIconContainerStyles} bg-purple-950/70`, // Adjusted background darkness/opacity
-    titleClassName: baseTitleStyles,
-    className: baseCardStyles, // Apply the new base styles directly to each card
+    id: "design",
+    icon: <IconPalette className="size-6 text-purple-400" />,
+    title: "UI/UX & Design",
+    description: "User-centric and visually appealing interfaces crafted with Figma & Adobe Suite.",
+    experience: "6+ Years Experience",
+    accentColor: "border-purple-500/50",
+    iconBg: "bg-purple-900/30",
   },
 ];
 
+// --- New TechCards Component ---
 function TechCards() {
   return (
-    // Container: Provide standard padding for spacing from screen edges
-    <div className="w-full py-12 px-4 sm:px-6 lg:px-8"> 
-      {/* Grid Layout Container:
-        - `mx-auto max-w-7xl`: Centers the grid and limits max width on large screens.
-        - `grid grid-cols-1`: Default to 1 column (mobile).
-        - `sm:grid-cols-2`: Switch to 2 columns on small screens (tablets) and up.
-        - `lg:grid-cols-3`: Switch to 3 columns on large screens (desktops) and up.
-        - `gap-6 md:gap-8`: Defines the spacing between grid items.
-      */}
-      <div className="mx-auto max-w-7xl grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 md:gap-8"> 
-        {/* DisplayCards Component Responsibility:
-          Now, DisplayCards should simply iterate through the 'cards' prop
-          and render each card's structure using the provided data (icon, title, etc.)
-          and applying the 'className' string from the card object to the outermost
-          element of each individual card. It should NOT implement grid or flex itself.
-          
-          Example of what DisplayCards might do internally (simplified):
-          cards.map((card, index) => (
-            <div key={index} className={card.className}> // Applies the baseCardStyles
-               // Render icon using card.iconClassName and card.icon
-               // Render title using card.titleClassName and card.title
-               // Render description, date etc.
+    // Section Container: Provides background and vertical padding
+    <section className="bg-gradient-to-b from-slate-900 to-slate-950 py-16 sm:py-24">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Optional Section Header */}
+        <div className="text-center mb-12">
+          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
+            My Expertise
+          </h2>
+          <p className="mt-4 text-lg leading-8 text-slate-300">
+            Bringing ideas to life with modern technology and design principles.
+          </p>
+        </div>
+
+        {/* Responsive Grid Container */}
+        <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Map over cardData to render each card */}
+          {cardData.map((card) => (
+            <div 
+              key={card.id}
+              // --- Blistered Card Styling ---
+              className={`
+                relative group overflow-hidden            # Base positioning and group for hover states
+                rounded-2xl bg-slate-800/60               # Slightly transparent background, soft corners
+                backdrop-blur-md                         # Blur effect for depth
+                p-6                                      # Inner padding
+                border border-slate-700/80                # Base border
+                shadow-lg                                # Base shadow for elevation
+                transition-all duration-300 ease-in-out  # Smooth transitions
+                hover:shadow-xl hover:shadow-black/40     # Increase shadow intensity on hover
+                hover:border-slate-600/90                # Change border slightly on hover
+                hover:scale-[1.03]                      # Scale up slightly on hover
+              `}
+            >
+              {/* Optional: Accent Border Highlight */}
+              <div className={`absolute inset-x-0 top-0 h-1 ${card.accentColor.replace('border-', 'bg-').replace('/50', '/70')} opacity-50 group-hover:opacity-100 transition-opacity duration-300`}></div>
+
+              {/* Icon Container */}
+              <div className={`mb-4 inline-flex items-center justify-center size-12 rounded-lg ${card.iconBg}`}>
+                {card.icon}
+              </div>
+
+              {/* Card Content */}
+              <h3 className="text-xl font-semibold leading-7 text-white">
+                {card.title}
+              </h3>
+              <p className="mt-2 text-base leading-7 text-slate-300">
+                {card.description}
+              </p>
+              <p className={`mt-4 text-sm font-medium ${card.accentColor.replace('border-', 'text-').replace('/50', '/90')} `}> 
+                {/* Using accent color for experience text */}
+                {card.experience}
+              </p>
             </div>
-          ))
-        */}
-        <DisplayCards cards={defaultCards} />
+          ))}
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 
 export { TechCards };
+
