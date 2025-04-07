@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import { TechCards } from "./TechCards";
 import { 
   IconBrandReact,
   IconBrandNextjs,
@@ -261,7 +260,6 @@ export function TechStackSection() {
                 "transform transition-all hover:-translate-y-2 hover:shadow-xl"
               )}
             >
-              <TechCards />
             </motion.div>
             {technologies.slice(1).map((tech, index) => (
               <TechCategory
