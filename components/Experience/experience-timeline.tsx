@@ -18,7 +18,7 @@ const experiences = [
       "Payment Gateway Integration",
       "WordPress CMS Integration"
     ],
-    side: "right" // Content on the right
+    side: "right"
   },
   {
     title: "Graphic Designer & Web Developer",
@@ -32,7 +32,7 @@ const experiences = [
       "Adobe Photoshop & Illustrator",
       "Full-stack Development"
     ],
-    side: "left" // Content on the left
+    side: "left"
   },
   {
     title: "WordPress Designer & Graphic Designer",
@@ -46,7 +46,7 @@ const experiences = [
       "Adobe Photoshop & Illustrator",
       "Social Media Content Creation"
     ],
-    side: "right" // Content on the right
+    side: "right"
   },
   {
     title: "Graphic Designer",
@@ -60,7 +60,7 @@ const experiences = [
       "Photography",
       "Volunteer Position"
     ],
-    side: "left" // Content on the left
+    side: "left"
   }
 ];
 
@@ -75,32 +75,33 @@ function TimelineItem({
   const isRight = experience.side === "right";
 
   return (
-    // Add 'relative' here to be the positioning context for the absolute dot on desktop
+    // Add padding-top on mobile ONLY to push content below the absolute dot
+    // Ensure relative positioning for stacking context if needed, though parent handles absolute positioning now.
     <div className={cn(
-      "mb-8 flex justify-between items-start w-full", // Use items-start for better alignment
-      "md:flex-row", // Use standard flex-row on desktop
-      isRight ? "" : "md:flex-row-reverse", // Reverse layout for left-side items
-      "flex-col" // Mobile: stack vertically
+      "relative mb-8 flex w-full", // Added relative just in case, mb-8 for spacing
+      "pt-12 md:pt-0", // Crucial: Add space at the top on mobile for the absolute dot
+      "flex-col md:flex-row", // Mobile column, Desktop row
+      isRight ? "" : "md:flex-row-reverse", // Desktop: reverse for left items
+      "md:items-start" // Align items to the start on desktop row
     )}>
 
-      {/* Empty space div - This pushes the content block to the correct side on desktop */}
-      {/* It takes up the other half of the space */}
+      {/* Desktop spacer (pushes content left/right) */}
       <div className="hidden md:block w-5/12"></div>
 
-      {/* Spacer for the center line width - prevents content overlap */}
-      <div className="hidden md:block w-12"></div>
+      {/* Desktop central spacer (space between content and center line) */}
+      <div className="hidden md:block w-12"></div> {/* Adjust width as needed */}
 
       {/* Content Block */}
       <motion.div
-        initial={{ opacity: 0, x: isRight ? 100 : -100 }}
+        initial={{ opacity: 0, x: isRight ? 50 : -50 }} // Reduced initial x offset
         whileInView={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.5, delay: index * 0.2 }}
+        transition={{ duration: 0.5, delay: index * 0.1 }} // Slightly faster delay
         viewport={{ once: true }}
         className={cn(
           "md:w-5/12 w-full px-6 py-4 rounded-lg", // Desktop takes half, mobile takes full
           "bg-white/[0.03] border border-white/[0.08]",
-          "transform transition-all hover:-translate-y-1 hover:shadow-xl",
-          "order-last md:order-none" // Ensure content is last on mobile stack
+          "transform transition-all hover:-translate-y-1 hover:shadow-xl"
+          // No order needed now
         )}
       >
         {/* -- Content structure remains the same -- */}
@@ -110,7 +111,7 @@ function TimelineItem({
             {experience.title}
           </h3>
         </div>
-        
+
         <div className="mb-4">
           <div className="flex items-center text-white/60 mb-2">
             <IconCalendar className="w-4 h-4 mr-2" />
@@ -121,16 +122,16 @@ function TimelineItem({
             <span className="break-words">{experience.company} • {experience.location}</span>
           </div>
         </div>
-        
+
         <p className="text-white/60 mb-4">{experience.description}</p>
-        
+
         <ul className="space-y-2">
           {experience.highlights.map((highlight, i) => (
             <motion.li
               key={i}
               initial={{ opacity: 0, x: 20 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: (index * 0.2) + (i * 0.1) }}
+              transition={{ duration: 0.3, delay: (index * 0.1) + (i * 0.05) }} // Faster delay
               viewport={{ once: true }}
               className="text-sm text-white/40 flex items-start gap-2"
             >
@@ -141,17 +142,7 @@ function TimelineItem({
         </ul>
       </motion.div>
 
-       {/* Mobile Timeline Dot - Displayed above content */}
-       <div className={cn(
-          "md:hidden", // Show only on mobile
-          "flex items-center justify-center",
-          "z-10 w-8 h-8 rounded-full mx-auto my-4", // Centered, with margin
-          "border border-white/[0.08] shadow-xl",
-          "bg-gradient-to-br from-indigo-500/10 to-rose-500/10",
-          "order-first" // Ensure dot is first in mobile column layout
-       )}>
-         <IconCircle className="w-3 h-3 fill-rose-500/80" />
-       </div>
+      {/* Mobile-only dot REMOVED - Handled by the single absolute dot */}
 
     </div>
   );
@@ -160,7 +151,7 @@ function TimelineItem({
 
 export function ExperienceTimeline() {
   return (
-    <div className="relative w-full bg-[#030303] py-24">
+    <div className="relative w-full bg-[#030303] py-24 overflow-hidden"> {/* Added overflow-hidden */}
       <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
 
       <div className="mx-auto max-w-5xl px-4 relative z-10">
@@ -185,19 +176,22 @@ export function ExperienceTimeline() {
 
         {/* Container for timeline items and the central line */}
         {/* Added 'relative' here as the main positioning context */}
-        <div className="relative wrap overflow-hidden">
-          {/* Central Timeline Line - visible on desktop */}
-          <div className="absolute left-1/2 h-full w-0.5 bg-white/[0.08] transform -translate-x-1/2 hidden md:block z-0"></div>
+        <div className="relative wrap"> {/* Removed overflow-hidden from here */}
+          {/* Central Timeline Line - NOW VISIBLE ON ALL SIZES */}
+          {/* Ensure it's behind the dots (z-0 vs z-20) */}
+          <div className="absolute left-1/2 h-full w-0.5 bg-white/[0.08] transform -translate-x-1/2 z-0"></div>
 
           {/* Map through experiences */}
           {experiences.map((experience, index) => (
-            <div key={index} className="relative"> {/* Add a relative wrapper for each item + dot */}
-               {/* Desktop Timeline Dot - Absolutely positioned */}
+            // This wrapper helps group the absolute dot with its corresponding TimelineItem logically
+            <div key={index} className="relative">
+               {/* SINGLE ABSOLUTE DOT for Mobile & Desktop */}
                <div className={cn(
-                 "hidden md:flex", // Show only on desktop
-                 "absolute left-1/2 top-6", // Position top-left corner at center line, offset down
-                 "transform -translate-x-1/2", // Center horizontally
-                 "items-center justify-center",
+                 "absolute left-1/2", // Center horizontally using left-1/2 and transform
+                 "transform -translate-x-1/2",
+                 // Adjust vertical position: higher on mobile, slightly lower on desktop
+                 "top-4 md:top-6", // e.g., 1rem on mobile, 1.5rem on desktop
+                 "flex items-center justify-center", // Center the icon inside the dot div
                  "z-20 w-8 h-8 rounded-full", // z-20 to be above line (z-0)
                  "border border-white/[0.08] shadow-xl",
                  "bg-gradient-to-br from-indigo-500/10 to-rose-500/10"
