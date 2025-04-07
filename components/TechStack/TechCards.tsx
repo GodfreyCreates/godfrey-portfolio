@@ -1,124 +1,82 @@
 "use client";
 
-import React from 'react';
-import DisplayCards from "@/components/ui/display-cards"; // Assuming this component renders individual card data
+import DisplayCards from "@/components/ui/display-cards"; // Assuming path
 import {
   IconCode,
-  IconServer, // Assuming this is meant for Frontend, maybe IconBrowser or similar? Using IconServer for now.
+  IconServer,
   IconPalette
 } from '@tabler/icons-react';
-import { motion } from 'framer-motion'; // Add motion for subtle animations
 
-// --- Refined Card Data ---
-// Removed layout classes (translate, grid-area) - these will be handled by the container
-// Standardized icon color approach
-// Added unique 'id' for React keys
-// Simplified hover effects will be applied via CSS in the container
-const defaultCardsData = [
+// --- Card Data with Responsive Layout Classes ---
+const responsiveCards = [
+  // Card 1: Backend
   {
-    id: 'backend',
-    icon: <IconCode className="size-5" />, // Slightly larger icon
-    title: "Backend Dev", // Slightly clearer title
-    description: "Building robust solutions with Node.js, APIs & Databases.",
+    icon: <IconCode className="size-4 text-rose-500/80" />,
+    title: "Backend",
+    description: "Solutions with Node.js & Databases",
     date: "2+ Years Experience",
-    iconClassName: "text-rose-500", // Use this for specific icon color
-    titleClassName: "text-xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-rose-300", // Reduced margin-bottom
-    // Base card styling (kept generic layout/appearance styles)
-    baseClassName: "border border-border/20 bg-card/60 backdrop-blur-sm rounded-xl p-6 transition-all duration-300 ease-out shadow-md",
-    // Desktop-specific overlay/grayscale (applied conditionally via container)
-    desktopEffectClassName: "grayscale hover:grayscale-0",
-    // Mobile will likely ignore the desktopEffectClassName
+    iconClassName: "text-rose-500",
+    titleClassName: "text-xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-rose-300",
+    className: `
+      w-full max-w-sm md:max-w-[280px] lg:max-w-[300px]  // Responsive width control
+      relative md:absolute md:left-1/2 // Base positioning for desktop stack
+      md:transform md:-translate-x-[70%] md:translate-y-10 md:z-10 // Desktop: Back, left position & Z
+      md:hover:-translate-y-2 md:hover:z-40 // Desktop: Subtle hover lift & bring to front
+      transition-all duration-300 ease-out // Ensure transitions apply
+      before:absolute before:w-[100%] before:outline-1 before:rounded-xl before:outline-border before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-background/50 grayscale-[100%] hover:before:opacity-0 before:transition-opacity before:duration-700 hover:grayscale-0 before:left-0 before:top-0 // Original styling kept
+    `,
   },
+  // Card 2: Frontend
   {
-    id: 'frontend',
-    icon: <IconServer className="size-5" />, // Or IconBrowser, etc.
-    title: "Frontend Dev",
-    description: "Crafting modern interfaces with React, Next.js & TypeScript.",
+    icon: <IconServer className="size-4 text-rose-500/80" />,
+    title: "Frontend",
+    description: "Modern web dev with React & Next.js",
     date: "3+ Years Experience",
     iconClassName: "text-indigo-500",
-    titleClassName: "text-xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-rose-300",
-    baseClassName: "border border-border/20 bg-card/60 backdrop-blur-sm rounded-xl p-6 transition-all duration-300 ease-out shadow-md",
-    desktopEffectClassName: "grayscale hover:grayscale-0",
+    titleClassName: "text-xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-rose-300",
+    className: `
+      w-full max-w-sm md:max-w-[280px] lg:max-w-[300px]
+      relative md:absolute md:left-1/2
+      md:transform md:-translate-x-[50%] md:translate-y-5 md:z-20 // Desktop: Middle position & Z
+      md:hover:-translate-y-2 md:hover:z-40
+      transition-all duration-300 ease-out
+      before:absolute before:w-[100%] before:outline-1 before:rounded-xl before:outline-border before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-background/50 grayscale-[100%] hover:before:opacity-0 before:transition-opacity before:duration-700 hover:grayscale-0 before:left-0 before:top-0
+    `,
   },
+  // Card 3: Graphic Design
   {
-    id: 'design',
-    icon: <IconPalette className="size-5" />,
-    title: "Graphic & UI/UX", // Combined title
-    description: "Designing intuitive experiences & visuals with Figma & Adobe Suite.",
+    icon: <IconPalette className="size-4 text-rose-500/80" />,
+    title: "Graphic Design",
+    description: "Creative UI/UX with design tools",
     date: "6+ Years Experience",
     iconClassName: "text-purple-500",
-    titleClassName: "text-xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-rose-300",
-    baseClassName: "border border-border/20 bg-card/60 backdrop-blur-sm rounded-xl p-6 transition-all duration-300 ease-out shadow-md",
-    desktopEffectClassName: "grayscale hover:grayscale-0",
+    titleClassName: "text-xl font-bold mb-3 bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 to-rose-300",
+    className: `
+      w-full max-w-sm md:max-w-[280px] lg:max-w-[300px]
+      relative md:absolute md:left-1/2
+      md:transform md:-translate-x-[30%] md:z-30 // Desktop: Front, right position & Z
+      md:hover:-translate-y-2 md:hover:z-40
+      transition-all duration-300 ease-out
+      // Note: Removed original translate-x-24 translate-y-20 hover:translate-y-10 here
+      // Kept other original styles if needed, adding grayscale/overlay like others for consistency:
+      before:absolute before:w-[100%] before:outline-1 before:rounded-xl before:outline-border before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-background/50 grayscale-[100%] hover:before:opacity-0 before:transition-opacity before:duration-700 hover:grayscale-0 before:left-0 before:top-0
+    `,
   },
 ];
 
-// Animation variants for cards appearing
-const cardVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: i * 0.15, // Stagger animation slightly
-      duration: 0.5,
-      ease: "easeOut"
-    }
-  })
-};
-
-
 function TechCards() {
   return (
-    // Section container with padding
-    <div className="py-16 md:py-24">
-      <div className="container mx-auto px-4">
-
-        {/* Cards Container - Handles responsive layout */}
-        <div className="
-          flex flex-col items-center gap-6 // Mobile: Vertical stack with gap
-          md:relative md:flex-row md:justify-center md:items-center md:min-h-[350px] // Desktop: Prepare for overlap
-        ">
-          {defaultCardsData.map((card, index) => (
-            <motion.div
-              key={card.id}
-              custom={index}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, amount: 0.3 }} // Trigger when 30% visible
-              variants={cardVariants}
-              className={`
-                w-full max-w-sm // Constrain width on mobile/desktop
-                md:absolute md:w-[300px] // Desktop: Absolute positioning, fixed width
-                md:transition-all md:duration-500 md:ease-out // Smooth transitions for hover/positioning
-                ${
-                  // --- Desktop Positioning & Z-index ---
-                  index === 0 ? 'md:translate-x-[-80px] md:translate-y-[0px] md:rotate-[-3deg] md:z-10 md:hover:z-40 md:hover:translate-y-[-10px] md:hover:rotate-[-1deg] md:hover:scale-105' :
-                  index === 1 ? 'md:translate-x-[0px]  md:translate-y-[-20px] md:rotate-[0deg]  md:z-20 md:hover:z-40 md:hover:translate-y-[-30px] md:hover:rotate-[0deg]  md:hover:scale-105' :
-                  index === 2 ? 'md:translate-x-[80px] md:translate-y-[0px] md:rotate-[3deg]  md:z-30 md:hover:z-40 md:hover:translate-y-[-10px] md:hover:rotate-[1deg]  md:hover:scale-105' : ''
-                  // Explanation:
-                  // - `md:absolute`: Enables overlap relative to the container.
-                  // - `md:w-[300px]`: Fixed width for consistency in stack.
-                  // - `md:translate-*`, `md:rotate-*`: Creates the fanned/stacked look.
-                  // - `md:z-*`: Controls stacking order (card 2 on top initially, card 3 highest z for balance).
-                  // - `md:hover:z-40`: Brings hovered card to the very front.
-                  // - `md:hover:translate-y-*`, `md:hover:rotate-*`, `md:hover:scale-105`: Subtle hover animation.
-                }
-              `}
-            >
-              {/* Pass combined classes to DisplayCards */}
-              <DisplayCards
-                 cards={[ // DisplayCards likely expects an array, pass only the current card
-                   {
-                     ...card,
-                     // Combine base styles with conditional desktop effects
-                     className: `${card.baseClassName} ${card.desktopEffectClassName}`
-                   }
-                 ]}
-               />
-            </motion.div>
-          ))}
-        </div>
+    // Container: Added padding, adjusted min-height for stack space on desktop
+    <div className="flex min-h-[auto] md:min-h-[350px] w-full items-center justify-center py-10 md:py-16">
+      {/* Inner Wrapper: Controls layout */}
+      <div className="
+        w-full max-w-lg px-4 // Limit width slightly on mobile, add padding
+        flex flex-col items-center gap-6 // Mobile: Vertical stack
+        md:max-w-none md:px-0 // Desktop: Remove max-width, padding
+        md:relative md:h-[300px] md:w-[400px] // Desktop: Set relative context, height, and width for the stack
+      ">
+        {/* DisplayCards receives data with responsive classes already embedded */}
+        <DisplayCards cards={responsiveCards} />
       </div>
     </div>
   );
