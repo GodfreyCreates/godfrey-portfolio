@@ -136,7 +136,7 @@ export function ServicesSection() {
             <span className="text-sm text-white/60 tracking-wide">Services</span>
           </motion.div>
           
-          <h2 className="text-4xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-white to-white/80">
+          <h2 className="text-4xl font-bold mb-4 bg-foreground">
             What I Offer
           </h2>
           
